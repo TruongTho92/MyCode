@@ -1,0 +1,144 @@
+/*1)ADMIN*/
+create table admin(
+    id int primary key AUTO_INCREMENT,
+    fullname varchar(50),
+    email varchar(150),
+    address varchar(200),
+    password varchar(50),
+    phone_number varchar(12),
+    created_at datetime,
+    updated_at datetime,
+    deleted int
+)
+
+/*2)USER*/ 
+create table users(
+    id int primary key AUTO_INCREMENT,
+    fullname varchar(50),
+    email varchar(150),
+    address varchar(200),
+    password varchar(50),
+    phone_number varchar(12),
+    created_at datetime,
+    updated_at datetime,
+    deleted int
+)
+
+/*3)LOGIN TOKEN */
+create table login_token(
+    id_user int references users(id), 
+    token varchar(50) not null unique,
+    primary key (id_user, token)
+)
+
+/*3)ADMIN TOKEN */
+create table admin_token(
+    id_admin int references admin(id), 
+    token varchar(50) not null unique,
+    primary key (id_admin, token)
+)
+
+/*4)CATEGORY*/
+create table category(
+    id int primary key AUTO_INCREMENT,
+    name varchar(100)
+)
+
+/*5)PRODUCT */
+create table products(
+    id int primary key AUTO_INCREMENT,
+    category_id int references category(id),
+    admin_create_id int references admin(id),
+    title varchar(350),
+    price int,
+    quantity int,
+    discount int,
+    thumbnail varchar(500),
+    description longtext,
+    created_at datetime,
+    updated_at datetime,
+    deleted int
+)
+
+/*5)PRODUCT DETAIL */
+create table admin_token(
+    id int PRIMARY KEY, 
+    
+    FOREIGN KEY id REFERENCES products(id)
+)
+
+/*6)GALERY*/
+create table galery(
+    id int primary key AUTO_INCREMENT,
+    product_id int references products(id),
+    thumbnail varchar(500)
+)
+
+/*7)FEEDBACK*/
+create table feedback(
+    id int primary key AUTO_INCREMENT,
+    user_id int references users(id),
+    fullname varchar(50),
+    email varchar(150),
+    address varchar(150),
+    phone_number varchar(20),
+    subject_name varchar(200),
+    note varchar(500)
+)
+
+/*8)ORDER */
+create table orders(
+    id int primary key AUTO_INCREMENT,
+    user_id int references users(id),
+    fullname varchar(50),
+    email varchar(150),
+    address varchar(200),
+    phone_number varchar(12),
+    note varchar(500),
+    order_date datetime,
+    status int,
+    total_money int
+)
+
+/*9)ORDER_DETAILS*/
+create table order_details(
+    id int primary key AUTO_INCREMENT,
+    order_id int references orders(id),
+    product_id int references products(id),
+    price int,
+    num int,
+    total_money int
+)
+
+/*10) PRODUCT_CATEGORY*/
+create table product_category(
+    product_id int,
+    category_id int,
+    PRIMARY KEY(product_id, category_id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (category_id) REFERENCES category(id)
+)
+
+/*11) CART*/
+create table cart(
+    id int primary key,
+    total_money int,
+    
+)
+
+/*SPECIFICATION*/
+create table specification(
+    id int,
+    screen_size varchar(50),
+    screen_technology varchar(50),
+    rear_camera longtext,
+    front_camera longtext,
+    chipset varchar(50),
+    ram varchar(20),
+    main_memory varchar(20),
+    battery varchar(50),
+    sim varchar(50),
+    operating_system varchar(20),
+    FOREIGN KEY (id) REFERENCES products(id),
+    PRIMARY KEY(id)
+)
