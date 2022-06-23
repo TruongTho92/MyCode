@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://www.rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
@@ -31,6 +31,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-rails'
 end
 
 group :development do
@@ -54,3 +55,16 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'bootstrap-sass', '3.4.1'
+gem 'bcrypt', '~> 3.1.13'
+gem 'rubocop-rails', require: false
+gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+gem 'will_paginate', '~> 3.3'
+gem 'bootstrap-will_paginate', '~> 1.0'
+gem 'jquery-rails'
+gem 'image_processing', '~> 1.12', '>= 1.12.2'
+gem 'mini_magick', '~> 4.11'
+gem 'active_storage_validations', '~> 0.9.7'
+gem 'active_model_serializers', '~> 0.10.12'
+gem 'jsonapi-serializer'
+gem "roo"

@@ -4,9 +4,10 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :name
       t.integer :age
       t.integer :phone
-      t.string :emails
+      t.string :email
 
       t.timestamps
     end
+    add_index :users, :email, type: :fulltext
   end
 end

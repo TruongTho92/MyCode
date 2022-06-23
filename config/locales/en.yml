@@ -31,3 +31,30 @@
 
 en:
   hello: "Hello world"
+  app_name: SAMPLE APP
+  header:
+    home: Home
+    help: Help  
+    contact: Contact
+    login: Login
+  form:
+    login: Login
+    email: Email
+    password: Password
+    password_confirmation: Password confirmation
+    new_user: New User?
+    sign_up_now: Sign Up Now?
+    forgot: Forgot password ?
+  user:
+    update_success: Update Success
+    login: Please Login
+  send_mail:
+    email_reset: Email sent with password reset instructions
+    email_not_found: Email address not found
+    password_empty: can't be empty
+    reset_success: Reset password successfully
+    email_expired: Password reset has expired.
+    update_password: Update password
+  welcome_to_the_sample_app: "Register user succesfully"
+  login_error: "Email or password incorrect"
+
