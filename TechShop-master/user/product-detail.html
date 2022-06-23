@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../public/user/font/themify-icons-font/themify-icons/themify-icons.css" />
+  <link rel="stylesheet" href="../public/user/font/fontawesome-free-5.15.4/fontawesome-free-5.15.4-web/css/all.css" />
+  <link rel="stylesheet" href="../public/user/css/base.css" />
+  <link rel="stylesheet" href="../public/user/css/home.css" />
+  <link rel="stylesheet" href="../public/user/css/tablet.css" />
+  <link rel="stylesheet" href="../public/user/css/mobile.css" />
+  <link rel="stylesheet" href="../public/user/css/product-list.css" />
+  <link rel="stylesheet" href="../public/user/css/product-detail.css" />
+  <title>LETech - Điện thoại,laptop,phụ kiện chính hãng</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="../public/common/js/utility.js"></script>
+  <script src="../public/admin/js/config.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <header id="header"></header>
+
+    <body>
+      <div class="product-detail">
+        <div class="grid">
+          <div class="product-detail__header">
+            <h3 class="product-detail__name-item">
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="row product-detail__body">
+          <div class="c-6 product-detail__container">
+            <img src="" alt="" class="product-detail__item-img" />
+            <div class="product-detail__price">
+              <p class="product-detail__price-new"></p>
+              <p class="product-detail__price-old"></p>
+            </div>
+            <a href="#" id="add_to_cart" class="product-detail__buying-btn">Thêm vào giỏ hàng
+            </a>
+            <!-- <a href="" class="product-detail__add-cart">Thêm vào giỏ hàng</a> -->
+          </div>
+          <div class="c-6 product-detail__info">
+            <div class="product-detail__header">
+              <h2 class="product-detail__info-header">Thông số kĩ thuật</h2>
+            </div>
+            <div class="product-detail__table">
+              <table class="product-detail__box">
+                
+               
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+    <footer id="footer"></footer>
+    <script>
+      $("#header").load("../layout/header.html");
+      $("#footer").load("../layout/footer.html");
+      id = getUrlParameter('id');
+
+      $.post(BASE_URL + API_PRODUCT, {
+        'action': 'query',
+        'id': id
+      }, function (data) {
+        obj = JSON.parse(data);
+        if (obj.status == 1) {
+          product = obj.product;
+          $('.product-detail__name-item').append(product['title']);
+          $('.product-detail__item-img').attr('src', product['thumbnail']);
+
+          //display price
+          var originalPrice;
+          currentPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product['price']);
+          if (product['discount'] != 0) {
+            originalPrice = currentPrice;
+            currentPrice = Number(product['price']) - Number(product['price'] * (product['discount'] / 100));
+            currentPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentPrice)
+          }
+
+          $('.product-detail__price-new').append(currentPrice);
+          $('.product-detail__price-old').append(originalPrice);
+
+          //specification
+          if(product['screen_size']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Kích thước màn hình</th>
+                <th>${product['screen_size']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['screen_technology']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Công nghệ màn hình</th>
+                <th>${product['screen_technology']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['rear_camera']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Camera sau</th>
+                <th>${product['rear_camera']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['front_camera']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Camera trước</th>
+                <th>${product['front_camera']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['chipset']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Chipset</th>
+                <th>${product['chipset']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['ram']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Dung lượng RAM</th>
+                <th>${product['ram']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['main_memory']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Bộ nhớ trong</th>
+                <th>${product['main_memory']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['battery']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Pin</th>
+                <th>${product['battery']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['sim']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>SIM</th>
+                <th>${product['sim']}</th>
+              </tr>
+            `);
+          }
+
+          if(product['operating_system']){
+            $('.product-detail__box').append(`
+              <tr>
+                <th>Hệ điều hành</th>
+                <th>${product['operating_system']}</th>
+              </tr>
+            `);
+          }
+          
+        }
+      });
+
+
+      $('#add_to_cart').on('click',function(e, ){
+        storage =localStorage.getItem('cart');
+        if(storage){
+          cart = JSON.parse(storage);
+        }else{
+          cart = [];
+        }
+
+        item = cart.find(c => c.id == id);
+        if(!item){
+          p = {
+            'id': id,
+            'quantity': 1
+          }
+          cart.push(p);
+        }
+        console.log(cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+        window.open('../index.html')
+      });
+    </script>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../public/user/font/themify-icons-font/themify-icons/themify-icons.css" />
+  <link rel="stylesheet" href="../public/user/font/fontawesome-free-5.15.4/fontawesome-free-5.15.4-web/css/all.css" />
+  <link rel="stylesheet" href="../public/user/css/base.css" />
+  <link rel="stylesheet" href="../public/user/css/home.css" />
+  <link rel="stylesheet" href="../public/user/css/tablet.css" />
+  <link rel="stylesheet" href="../public/user/css/mobile.css" />
+  <link rel="stylesheet" href="../public/user/css/product-list.css" />
+  <title>LETech - Điện thoại,laptop,phụ kiện chính hãng</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="../public/admin/js/config.js"></script>
+
+</head>
+
+<body>
+  <div class="app">
+    <header id="header"></header>
+      <div class="grid">
+        <div class="list-mobile">
+          <h3 class="list-mobile__sort">Sắp xếp theo</h3>
+          <div class="list-mobile__sort-by">
+            <div class="featured__phone__related__tag">
+              <a href="" class="futured__phone__item"><i class="fas fa-sort-amount-up"></i> Giá cao</a>
+            </div>
+            <div class="featured__phone__related__tag">
+              <a href="" class="futured__phone__item"><i class="fas fa-sort-amount-up-alt"></i> Giá thấp</a>
+            </div>
+            <div class="featured__phone__related__tag">
+              <a href="" class="futured__phone__item"><i class="fas fa-eye"></i> Xem nhiều</a>
+            </div>
+          </div>
+          <!-- Phone -->
+          <div class="featured__phone grid wide">
+            <div class="list-item-mobile">
+
+            </div>
+
+            <!-- Tablet -->
+            <div class="tablet__featured__phone">
+              <div class="tablet__featured__phone__title">
+                <a href="">Điện thoại nổi bật</a>
+                <a href="">Xem tất cả</a>
+              </div>
+
+            </div>
+            <!-- Product List -->
+            <div id="productList" class="featured__phone__product__list">
+
+              
+            </div>
+            <!-- end product list -->
+          </div>
+        </div>
+        <nav aria-label="...">
+          <ul id="pagination" class="pagination">
+            
+          </ul>
+        </nav>
+      </div>
+      <footer id="footer"></footer>
+    </body>
+    <script src="../public/common/js/utility.js"></script>
+
+
+
+    <script>
+      $("#header").load("../layout/header.html");
+      $("#footer").load("../layout/footer.html");
+
+      $(function () {
+        category_id = getUrlParameter('id');
+        if(!category_id){
+          category_id='';
+        }
+
+        search = getUrlParameter('search');
+        if(!search){
+          search='';
+        }
+
+
+        //pagination
+        page = getUrlParameter('page');
+        if(!page){
+          page=1;
+        }
+        num=2;
+
+        //show product
+        $.post(BASE_URL + API_PRODUCT, {
+          'action': 'list',
+          'category_id': category_id,
+          'search': search
+        }, function (data) {
+          obj = JSON.parse(data)
+          console.log(obj)
+
+          if(obj.status==1){
+            productList = obj.productList;
+            i=(page-1)*num;
+            n = i + num;
+
+            if(n>productList.length){
+              n=productList.length
+            }
+
+            for(;i<n;i++){
+              product = productList[i];
+
+              saleTagHtml=``;
+              originalPriceHtml=``;
+              currentPrice=new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product['price']);
+              if(product['discount']!=0){
+
+                saleTagHtml+=`
+                <div class="flash__sale__discount">
+                  <p>Giảm ${product['discount']}%</p>
+                </div>
+                `;
+
+                originalPriceHtml+=`
+                <div class="featured__phone__product__desc__price__old">
+                  <p>
+                    ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product['price'])}
+                  </p>
+                </div>
+                `;
+
+                currentPrice = Number(product['price']) - Number(product['price'] * (product['discount']/100));
+                currentPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentPrice)
+              }
+              if(product['description']){
+                descriptionHtml = `<div class="featured__phone__product__promotion__info">
+                            <p>
+                              ${product['description']}
+                            </p>
+                          </div>`;
+              }else{
+                descriptionHtml='';
+              }
+
+              $('#productList').append(`
+              <div class="featured__phone__product__item">
+                      ${saleTagHtml}
+                      <div class="featured__phone__product__img__wrapper">
+                        <a href="product-detail.html?id=${product['id']}"><img src="${product['thumbnail']}" alt="" /></a>
+                      </div>
+                      <div class="featured__phone__product__desc">
+                        <div class="featured__phone__product__desc__title">
+                          <a href="product-detail.html?id=${product['id']}" class="featured__phone__product">
+                            ${product['title']}
+                          </a>
+                        </div>
+                        <div class="featured__phone__product__desc__price">
+                          <div class="featured__phone__product__desc__price__new">
+                            <p>
+                              ${currentPrice}
+                            </p>
+                          </div>
+                          ${originalPriceHtml}
+                        </div>
+                        ${descriptionHtml}
+                      </div>
+                    </div>
+              `);
+            }
+            
+            pagination(num, page, productList.length, category_id,search);
+          }
+        });
+
+        
+
+      });
+    </script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./public/user/font/themify-icons-font/themify-icons/themify-icons.css" />
+  <link rel="stylesheet" href="./public/user/font/fontawesome-free-5.15.4/fontawesome-free-5.15.4-web/css/all.css" />
+  <link rel="stylesheet" href="./public/user/css/base.css" />
+  <link rel="stylesheet" href="./public/user/css/home.css" />
+  <link rel="stylesheet" href="./public/user/css/tablet.css" />
+  <link rel="stylesheet" href="./public/user/css/mobile.css" />
+  <title>LETech - Điện thoại,laptop,phụ kiện chính hãng</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="public/common/js/utility.js"></script>
+  <script src="public/admin/js/config.js"></script>
+</head>
+
+<body>
+  <header id="header"></header>
+
+  <body>
+    <!-- Slide -->
+    <div class="tablet__slidebar ">
+      <div class="grid">
+        <div class="slidebar">
+          <ul id="cate-list" class="slidebar__list">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide grid wide">
+      <div id="show-cate" class="row">
+
+        <!-- Laptop -->
+
+      </div>
+    </div>
+    <footer id="footer"></footer>
+  </body>
+
+  <script>
+    $("#header").load("layout/header.html");
+    $("#footer").load("layout/footer.html");
+
+    $(function () {
+      //logo
+      $('.header__logo__img').html(`
+        <a href="#">
+          <img src="public/user/img/Desktop logo/logoLE.png" alt=""/>
+        </a>
+      `);
+      $('.smartphone__header__logo').html(`
+        <a href="#">
+          <img src="public/user/img/Desktop logo/logoLE.png" alt=""/>
+        </a>
+      `);
+      $('.tablet__header__logo').html(`
+        <a href="#">
+          <img src="public/user/img/Desktop logo/logoLE.png" alt=""/>
+        </a>
+      `);
+      
+      // account
+      $('.header__navbar__item__wrapper__last').html(`
+      <a
+        href="user/user-detail.html"
+        class="header__navbar__item__link"
+      >
+        <div class="header__navbar__item__link__icon__wrapper__last">
+          <i class="far fa-user-circle"></i>
+        </div>
+        <div class="header__navbar__item__link__desc__wrapper">
+          <p>Smember</p>
+        </div>
+      </a>
+      `);
+      $('#tablet-user').attr('href','user/user-detail.html')
+
+      //cart
+      $('.tablet__shopping__cart').attr('href','user/cart.html')
+      $('.header__navbar__item__link ').attr('href','user/cart.html')
+      $('.smartphone__shopping__cart').attr('href','user/cart.html')
+      
+      //show product
+      $.post(BASE_URL + API_PRODUCT, {
+        'action': 'categorize'
+      }, function (data) {
+        var obj = JSON.parse(data);
+        if (obj.status == 1) {
+          categoryList = obj.categoryList;
+          for (i = 0; i < categoryList.length; i++) {
+            cate = categoryList[i];
+
+            //check empty list
+            cate_id = cate['id'];
+            productHtml = ``;
+            productList = [];
+            if(obj.productList[cate_id]){
+              productList = obj.productList[cate_id];
+            }else{
+              continue;
+            }
+
+            //number of products displayed
+            if(productList.length>5){
+              n=5
+            }else{
+              n=productList.length;
+            }
+
+            for (j = 0; j < n; j++) {
+              product = productList[j];
+              
+              //check discount
+              saleTagHtml=``;
+              originalPriceHtml=``;
+              currentPrice=new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product['price']);
+              if(product['discount']!=0){
+
+                saleTagHtml+=`
+                <div class="flash__sale__discount">
+                  <p>Giảm ${product['discount']}%</p>
+                </div>
+                `;
+
+                originalPriceHtml+=`
+                <div class="featured__phone__product__desc__price__old">
+                  <p>
+                    ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product['price'])}
+                  </p>
+                </div>
+                `;
+
+                currentPrice = Number(product['price']) - Number(product['price'] * (product['discount']/100));
+                currentPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentPrice)
+              }
+              if(product['description']){
+                descriptionHtml = `<div class="featured__phone__product__promotion__info">
+                            <p>
+                              ${product['description']}
+                            </p>
+                          </div>`;
+              }else{
+                descriptionHtml='';
+              }
+
+              productHtml +=`
+                    <div class="featured__phone__product__item">
+                      ${saleTagHtml}
+                      <div class="featured__phone__product__img__wrapper">
+                        <a href="./user/product-detail.html?id=${product['id']}"><img src="${product['thumbnail']}" alt="" /></a>
+                      </div>
+                      <div class="featured__phone__product__desc">
+                        <div class="featured__phone__product__desc__title">
+                          <a href="./user/product-detail.html?id=${product['id']}" class="featured__phone__product">
+                            ${product['title']}
+                          </a>
+                        </div>
+                        <div class="featured__phone__product__desc__price">
+                          <div class="featured__phone__product__desc__price__new">
+                            <p>
+                              ${currentPrice}
+                            </p>
+                          </div>
+                          ${originalPriceHtml}
+                        </div>
+                        ${descriptionHtml}
+                      </div>
+                    </div>
+              `;
+            }
+            $('#show-cate').append(`
+            <div class="featured__phone grid wide">
+          <!-- Title -->
+          <div class="row featured__phone__gutter">
+            <div class="c-3">
+              <div class="featured__phone__title">
+                <a href="./user/product-list.html?id=${cate['id']}" class="featured__phone__title__text">${cate['name']}</a>
+              </div>
+            </div>
+          </div>
+          <!-- Tablet -->
+          <div class="tablet__featured__phone">
+            <div class="tablet__featured__phone__title">
+              <a href="./user/product-list.html?id=${cate['id']}">${cate['name']}</a>
+              <a href="./user/product-list.html?id=${cate['id']}">Xem tất cả</a>
+            </div>
+
+          </div>
+          <!-- Product List -->
+          <div class="featured__phone__product__list">
+            ${productHtml}
+          </div>
+        </div>
+            `);
+
+            $('#cate-list').append(`
+            <li class="slidebar__item">
+              <a href="user/product-list.html?id=${cate['id']}" class="slidebar__item__link">
+                <div class="slidebar__item__link__text__wrapper">
+                  
+                  <p>${cate['name']}</p>
+                </div>
+              </a>
+            </li>
+            `);
+          }
+        } else {
+          //window.open('../authen/login.html', '_self');
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>
