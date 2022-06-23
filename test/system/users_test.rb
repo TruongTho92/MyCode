@@ -15,7 +15,7 @@ class UsersTest < ApplicationSystemTestCase
     click_on "New User"
 
     fill_in "Age", with: @user.age
-    fill_in "Emails", with: @user.emails
+    fill_in "Emails", with: @user.email
     fill_in "Name", with: @user.name
     fill_in "Phone", with: @user.phone
     click_on "Create User"
@@ -29,7 +29,7 @@ class UsersTest < ApplicationSystemTestCase
     click_on "Edit", match: :first
 
     fill_in "Age", with: @user.age
-    fill_in "Emails", with: @user.emails
+    fill_in "Emails", with: @user.email
     fill_in "Name", with: @user.name
     fill_in "Phone", with: @user.phone
     click_on "Update User"

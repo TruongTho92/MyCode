@@ -1,0 +1,24 @@
+
+[1mFrom:[0m /home/truongtho/Desktop/rubyk02/rubyonrails/tho/ROR_project/app/controllers/api/v1/sessions_controller.rb:7 Api::V1::SessionsController#create:
+
+     [1;34m5[0m: [32mdef[0m [1;34mcreate[0m
+     [1;34m6[0m:   
+ =>  [1;34m7[0m:   binding.pry
+     [1;34m8[0m:   
+     [1;34m9[0m:   user = [1;34;4mUser[0m.find_by([35memail[0m: params[[33m:email[0m].downcase)
+    [1;34m10[0m:   [32mif[0m user&.authenticate(params[[33m:password[0m])
+    [1;34m11[0m:     [32mif[0m user.activated
+    [1;34m12[0m:       log_in(user)
+    [1;34m13[0m:       user.generate_token
+    [1;34m14[0m:       set_api_token(user)
+    [1;34m15[0m:       remember_me(user)
+    [1;34m16[0m:       render [35mjson[0m: success_message([31m[1;31m'[0m[31mSuccessfully[1;31m'[0m[31m[0m, [1;34;4mActiveModelSerializers[0m::[1;34;4mSerializableResource[0m.new(user, [35meach_serializer[0m: [1;34;4mUsersSerializer[0m))
+    [1;34m17[0m:     [32melse[0m
+    [1;34m18[0m:       message = [31m[1;31m"[0m[31mAccount not activated. Check your email for the activation link.[1;31m"[0m[31m[0m
+    [1;34m19[0m:       render [35mjson[0m: error_message(message)
+    [1;34m20[0m:     [32mend[0m
+    [1;34m21[0m:   [32melse[0m
+    [1;34m22[0m:     render [35mjson[0m: error_message([31m[1;31m'[0m[31mInvalid email/password combination[1;31m'[0m[31m[0m)
+    [1;34m23[0m:   [32mend[0m
+    [1;34m24[0m: [32mend[0m
+

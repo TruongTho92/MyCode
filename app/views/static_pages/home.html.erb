@@ -1,0 +1,72 @@
+<%= javascript_include_tag 'micropost/micropost.js' %>
+<%= javascript_include_tag 'handlebars' %>
+<% if logged_in? %>
+  <div class="row" style="
+    display: flex;
+    justify-content: center;">
+    <div class="col-md-8">
+      <div class="main-wraper">
+        <ul class = "chat-rooms owl-carousel owl-theme owl-responsive-1000 owl-loaded">
+          <div class="owl-stage-outer">
+            <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 705px;">
+              <div class="owl-item active" style="width: 126px; margin-right: 15px;">
+                <li>
+                  <div class="room-avatar">
+                    <img class = "img-user"src="https://hddesktopwallpapers.in/wp-content/uploads/2015/09/resting-images.jpg" alt="Italian Trulli">
+                  </div>
+                  <span>Meo Meo</span>
+                  <a class="join" href="#" title="Join Room">Add</a>
+                </li>
+              </div>
+              <div class="owl-item active" style="width: 126px; margin-right: 15px;">
+                <li>
+                  <div class="room-avatar">
+                    <img class = "img-user"src="https://hddesktopwallpapers.in/wp-content/uploads/2015/09/resting-images.jpg" alt="Italian Trulli">
+                  </div>
+                  <span>Meo Meo</span>
+                  <a class="join" href="#" title="Join Room">Add</a>
+                </li>
+              </div>
+            </div>
+          </div>
+        </ul>
+      </div>
+      <div style="margin-top: 180px;"></div>
+      <%= link_to "Import User", import_users_path %>
+      <%= link_to "Export Users", export_users_path(format: :csv) %>      
+      <%= form_with url: static_pages_home_path, method: :get do |f| %>
+      <%= render 'shared/search' %>
+      <% end %>
+      <%= render "shared/feed" %>
+    </div>
+  </div>
+<% else %>
+...
+<% end %>
+
+<script id="user-list-item-template" type="text/x-handlebars-template">
+  {{#each micro_posts}}
+    <li id="micropost-{{ id }}">
+      <a href="/en/users/{{ user.id }}">
+        <img alt="{{ user.name }}" class="gravatar" src="{{ user.avatar }}">
+      </a>
+      <span class="user">
+        <a href="/en/users/{{ user.id }}">
+          {{ user.name }}
+        </a>
+      </span>
+      <span class="content">
+        {{ content }}
+      </span>
+    </li> 
+  {{/each}}
+</script> 
+
+<script id="list-comment-template" type="text/x-handlebars-template">
+  <div class="form-outline list-cmt-span" style="margin-left: 8%; margin-right: 8%;">
+    <span>
+      <a class="avatar-cmt" href="#"><img alt="" class="gravatar" src={{comment.user.avatar}}></a>
+      <p class="p-comment">{{ comment.text }}</p>
+    </span>
+  </div>
+</script>

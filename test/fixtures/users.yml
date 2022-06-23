@@ -4,10 +4,10 @@ one:
   name: MyString
   age: 1
   phone: 1
-  emails: MyString
+  email: MyString
 
 two:
   name: MyString
   age: 1
   phone: 1
-  emails: MyString
+  email: MyString
